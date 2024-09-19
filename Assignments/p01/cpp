@@ -1,1 +1,133 @@
+//Ethan Krchnak - OOP - FractionClass
 
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+class Fractions {
+private:
+	int numerator;	
+	int denominator;
+	
+public:
+	//Constructor to declare fractions
+	Fractions(int num, int den) : numerator(num), denominator(den)
+	{
+		//Check if denominator is equal to 0, then "Invalid"
+		if (denominator == 0 )
+		{
+			throw invalid_argument("INVALID FRACTION :: Denominator cannot be 0");
+		}
+	}
+
+	//Adding 2 fractions
+	Fractions operator+(const Fractions& other) {
+		int LCD = lcd(denominator, other.denominator);
+		int num1 = numerator * (LCD / denominator);
+		int num2 = other.numerator * (LCD / other.denominator);
+		Fractions add(num1 + num2, LCD);
+		add.reduce();
+		return add;
+	}
+
+	//Subtracting 2 fractions
+	Fractions operator-(const Fractions& other) {
+		int LCD = lcd(denominator, other.denominator);
+		int num1 = numerator * (LCD / denominator);
+		int num2 = other.numerator * (LCD / other.denominator);
+		Fractions sub(num1 - num2, LCD);
+		sub.reduce();
+		return sub;
+	}
+
+	//multiplying 2 fractions
+	Fractions operator*(const Fractions& other) {
+		Fractions mul(numerator * other.numerator, denominator * other.denominator);
+		mul.reduce();
+		return mul;
+	}
+
+	//dividing 2 fractions
+	Fractions operator/(const Fractions& other) {
+		Fractions div(numerator * other.denominator, denominator * other.numerator);
+		div.reduce();
+		return div;
+	}
+
+	bool operator==(const Fractions& other) {
+		return (numerator == other.numerator) && (denominator == other.denominator);
+		
+		
+	}
+
+	//Ouput Fractions
+	friend ostream& operator<<(ostream& os, const Fractions& frac) {
+		os << frac.numerator << "/" << frac.denominator;
+		return os;
+	}
+
+	//Simplify the fraction
+	void reduce() {
+		int gcd_value = gcd(numerator, denominator);
+		numerator /= gcd_value;
+		denominator /= gcd_value;
+	}
+
+	//Implemented from ChatGPT to find the GCD using the "Euclidean algorithm"
+	int gcd(int a, int b) {
+		while (b != 0)
+		{
+			int temp = b;
+			b = a % b;
+			a = temp;
+		}
+		return a;
+	}
+
+	//Return the least common denominator
+	int lcd(int a, int b) {
+		return (a * b) / gcd(a, b);
+	}
+
+};
+
+int main()
+{
+	ifstream inputFile("fractions.txt");
+	string f1, op, f2;
+	int n1, n2, d1, d2;
+
+	//Read in inputFile
+	while (inputFile >> f1 >> op >> f2) {
+		cout << f1 << " " << op << " " << f2 << endl;
+		n1 = f1[0] - '0';
+		d1 = f1[2] - '0';
+		n2 = f2[0] - '0';
+		d2 = f2[2] - '0';
+
+		Fractions frac1(n1, d1);
+		Fractions frac2(n2, d2);
+
+		if (op == "+")
+		{
+			Fractions add = frac1 + frac2;
+			cout << add << endl << endl;
+		}
+		else if (op == "-")
+		{
+			Fractions sub = frac1 - frac2;
+			cout << sub << endl << endl;
+		}
+		else if (op == "*")
+		{
+			Fractions mul = frac1 * frac2;
+			cout << mul << endl << endl;
+		}
+		else
+		{
+			Fractions div = frac1 / frac2;
+			cout << div << endl << endl;
+		}
+	}
+}
