@@ -27,3 +27,11 @@ Class endGame
 ...Is a type of scoring class...
 [?]Data :: score, totalDice
 [!]Actions :: getNumOfDice() [How much dice is in current grid], getScore()
+
+
+
+[Necessary] :: FirstName, Highscore, LastName, PlayerStats, Score, userId, Winner
+
+[Possible] :: coins, Leaderboard, Levels, streak
+
+[Wishful] :: chat, Messaging, teamstats, teams
