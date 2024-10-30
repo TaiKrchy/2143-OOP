@@ -1,6 +1,6 @@
 ## Ethan Krchnak
 
-#### Repo:  4883-Prog-Tech
+#### Repo:  2143 - OOP
 #### Email: taikrchnak@gmail.com
 #### MSU Mens Soccer #2
 #### CompSci Major
