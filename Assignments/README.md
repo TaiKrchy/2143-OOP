@@ -4,3 +4,4 @@
 | :-: | ----------- | ---------------------- |
 |  1  | PO1      | Fractions Class           |
 |  2  | PO2B     | Knucklebones Outline      |
+|  2  | PO2B     | Knucklebones Outline      |
