@@ -1,1 +1,75 @@
+#include <SFML/Graphics.hpp>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
 
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 600;
+const int NUM_LIGHTS = 50;
+
+class ChristmasTree {
+public:
+    ChristmasTree() {
+        // Set up the tree's triangle parts (simple representation)
+        tree.setPointCount(3);
+        tree.setPoint(0, sf::Vector2f(WINDOW_WIDTH / 2, 100)); // Top of the tree
+        tree.setPoint(1, sf::Vector2f(WINDOW_WIDTH / 2 - 150, 400)); // Bottom left
+        tree.setPoint(2, sf::Vector2f(WINDOW_WIDTH / 2 + 150, 400)); // Bottom right
+        tree.setFillColor(sf::Color(0, 128, 0)); // Green color for tree
+
+        // Add ornaments (lights)
+        srand(static_cast<unsigned>(time(0))); // Seed for random number generation
+        for (int i = 0; i < NUM_LIGHTS; ++i) {
+            sf::CircleShape light(5); // Light radius
+            light.setFillColor(sf::Color::Red);
+            light.setPosition(rand() % WINDOW_WIDTH, rand() % 400 + 150); // Random positions
+            lights.push_back(light);
+        }
+    }
+
+    void draw(sf::RenderWindow& window) {
+        // Draw the tree
+        window.draw(tree);
+
+        // Draw the lights (flickering)
+        for (auto& light : lights) {
+            light.setFillColor(flicker() ? randomColor() : light.getFillColor());
+            window.draw(light);
+        }
+    }
+
+private:
+    sf::ConvexShape tree;
+    std::vector<sf::CircleShape> lights;
+
+    // Random flickering effect
+    bool flicker() {
+        return rand() % 10 < 2; // 20% chance for flicker
+    }
+
+    // Generate a random color for lights
+    sf::Color randomColor() {
+        return sf::Color(rand() % 256, rand() % 256, rand() % 256);
+    }
+};
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Christmas Tree with Flickering Lights");
+
+    ChristmasTree tree;
+
+    // Game loop
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear(sf::Color::Black); // Background color
+        tree.draw(window); // Draw the tree and lights
+        window.display();
+    }
+
+    return 0;
+}
